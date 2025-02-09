@@ -87,6 +87,26 @@ app.get('/commands', (req, res) => {
     });
 });
 
+app.post('/disconnectall', (req, res) => {
+    const { target } = req.body;
+
+    if (!target) {
+        return res.status(400).json({ error: "no client to disconnect" });
+    }
+
+    // Insert the disconnectall command into the database
+    db.run("INSERT INTO commands (command, target, clientKey, room) VALUES (?, ?, ?, ?)", 
+        ["disconnectall", target, null, null], 
+        function (err) {
+            if (err) {
+                return res.status(500).json({ error: err.message });
+            }
+            res.json({ success: true, commandID: this.lastID });
+        }
+    );
+});
+
+
 // Listen on the correct port (defaults to 3000 if not set)
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
