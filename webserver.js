@@ -18,7 +18,6 @@ function genkey(length = 16) {
 }
 
 app.post('/addclient', (req, res) => {
-
     const key = genkey(16);
     db.run("INSERT INTO clients (key) VALUES (?)", [key], function (err) {
         if (err) {
@@ -36,6 +35,7 @@ app.get('/clients', (req, res) => {
         res.json(rows);
     });
 });
+
 app.post('/removeclient', (req, res) => {
     const { key } = req.body;
 
@@ -78,7 +78,23 @@ app.post('/joinroom', (req, res) => {
     );
 });
 
+app.post('/follow', (req, res) => {
+    const { target, clientKey } = req.body;
 
+    if (!target || !clientKey) {
+        return res.status(400).json({ error: "invalid params" });
+    }
+
+    db.run("INSERT INTO commands (command, target, clientKey) VALUES (?, ?, ?)", 
+        ["follow", target, clientKey], 
+        function (err) {
+            if (err) {
+                return res.status(500).json({ error: err.message });
+            }
+            res.json({ success: true, commandID: this.lastID });
+        }
+    );
+});
 
 app.get('/commands', (req, res) => {
     db.get("SELECT * FROM commands ORDER BY id DESC LIMIT 1", [], (err, row) => {
