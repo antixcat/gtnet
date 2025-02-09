@@ -87,8 +87,6 @@ app.get('/commands', (req, res) => {
     });
 });
 
-
-// Listen on the correct port (defaults to 3000 if not set)
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
