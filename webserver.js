@@ -78,7 +78,7 @@ app.post('/joinroom', (req, res) => {
     );
 });
 
-app.post('/follow', (req, res) => {
+app.post('/changename', (req, res) => {
     const { target, clientKey } = req.body;
 
     if (!target || !clientKey) {
