@@ -18,6 +18,7 @@ function genkey(length = 16) {
 }
 
 app.post('/addclient', (req, res) => {
+
     const key = genkey(16);
     db.run("INSERT INTO clients (key) VALUES (?)", [key], function (err) {
         if (err) {
@@ -35,7 +36,6 @@ app.get('/clients', (req, res) => {
         res.json(rows);
     });
 });
-
 app.post('/removeclient', (req, res) => {
     const { key } = req.body;
 
@@ -77,6 +77,8 @@ app.post('/joinroom', (req, res) => {
         }
     );
 });
+
+
 
 app.get('/commands', (req, res) => {
     db.get("SELECT * FROM commands ORDER BY id DESC LIMIT 1", [], (err, row) => {
